@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.R.PC - Sistema de Reparación de Computadoras</title>
+    <!-- FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #0a0e17;
+            --card-bg: rgba(22, 31, 49, 0.8);
+            --border-color: rgba(0, 242, 254, 0.2);
+            --text-light: #f1f5f9;
+            --text-muted: #94a3b8;
+            --m1-color: #00f2fe; /* Cian */
+            --m2-color: #00ff87; /* Verde */
+            --m3-color: #ffdd00; /* Amarillo */
+            --m4-color: #ff007f; /* Magenta */
+            --m5-color: #a8ff78; /* Verde Claro */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* HEADER / HERO SECTION */
+        .hero {
+            background: linear-gradient(rgba(10, 14, 23, 0.85), rgba(10, 14, 23, 0.95)), 
+                        url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            padding: 3rem 1rem 4rem 1rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            color: #ffffff;
+            text-shadow: 0 0 15px var(--m1-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .hero h2 {
+            font-size: 1.5rem;
+            color: var(--m1-color);
+            margin-bottom: 1rem;
+            font-weight: 400;
+        }
+
+        .hero p {
+            max-width: 650px;
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .location-badge {
+            background: rgba(0, 242, 254, 0.1);
+            border: 1px solid var(--m1-color);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* CONTAINER GENERAL */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        /* BUSCADOR SECTION */
+        .search-section {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid var(--border-color);
+            margin-top: -40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .search-box {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            font-size: 1.1rem;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background: rgba(10, 14, 23, 0.9);
+            color: #fff;
+            outline: none;
+            transition: border 0.3s;
+        }
+
+        .search-box input:focus {
+            border-color: var(--m1-color);
+            box-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1rem;
+            color: var(--text-muted);
+            font-size: 1.2rem;
+        }
+
+        /* EXTRA TOOLS SECTION */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .tool-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            border-radius: 12px;
+        }
+
+        .tool-card h3 {
+            color: var(--m1-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .calculator input, .calculator select {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 0.8rem;
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+            background: #0a0e17;
+            color: #fff;
+        }
+
+        /* MODULES & LESSONS LIST */
+        .module-header {
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 2rem 0 1rem 0;
+            font-size: 1.3rem;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .m1-bg { background: rgba(0, 242, 254, 0.15); border-left: 5px solid var(--m1-color); color: var(--m1-color); }
+        .m2-bg { background: rgba(0, 255, 135, 0.15); border-left: 5px solid var(--m2-color); color: var(--m2-color); }
+        .m3-bg { background: rgba(255, 221, 0, 0.15); border-left: 5px solid var(--m3-color); color: var(--m3-color); }
+        .m4-bg { background: rgba(255, 0, 127, 0.15); border-left: 5px solid var(--m4-color); color: var(--m4-color); }
+        .m5-bg { background: rgba(168, 255, 120, 0.15); border-left: 5px solid var(--m5-color); color: var(--m5-color); }
+
+        .lessons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .lesson-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .lesson-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--m1-color);
+            background: rgba(30, 41, 59, 0.9);
+        }
+
+        .lesson-number {
+            font-size: 0.8rem;
+            font-weight: bold;
+            opacity: 0.7;
+            margin-bottom: 0.3rem;
+        }
+
+        .lesson-title {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        /* MODAL DE DETALLE DE LECCIÓN */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        .modal-content {
+            background: #111827;
+            border: 1px solid var(--m1-color);
+            width: 100%;
+            max-width: 600px;
+            border-radius: 12px;
+            padding: 2rem;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,242,254,0.3);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        .close-modal:hover { color: #fff; }
+
+        .btn-youtube {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #ff0000;
+            color: white;
+            padding: 0.7rem 1.2rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 1.5rem;
+            transition: background 0.3s;
+        }
+
+        .btn-youtube:hover { background: #cc0000; }
+
+        /* FOOTER / CONTACTO */
+        footer {
+            background: #06090e;
+            border-top: 1px solid var(--border-color);
+            padding: 3rem 1rem 1rem 1rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .social-links a {
+            color: var(--text-light);
+            font-size: 1.5rem;
+            margin-right: 1rem;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover { color: var(--m1-color); }
+
+        .credits {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .hero h2 { font-size: 1.2rem; }
+            .lessons-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SECCIÓN 1: PRESENTACIÓN DE INICIO (SIN EL BOTÓN) -->
+    <header class="hero">
+        <h1>Sistema de Reparación de Computadoras</h1>
+        <h2>S.R.PC • Electrónica • Cursos de Python</h2>
+        <p>Aprende desde los fundamentos de la electrónica analógica hasta la reparación avanzada de placas madre, laptops y programación estructurada.</p>
+        <div class="location-badge">
+            <i class="fa-solid fa-location-dot"></i> Santiago, Veraguas — Panamá 🇵🇦
+        </div>
+    </header>
+
+    <div class="container">
+        
+        <!-- SECCIÓN 2: BUSCADOR MEJORADO (POR NÚMERO, NOMBRE O COINCIDENCIA) -->
+        <section id="buscador" class="search-section">
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="searchInput" placeholder="Escribe un número (ej: 192), nombre (ej: Diccionario) o tema (ej: Placa Madre)..." oninput="filtrarLecciones()">
+            </div>
+        </section>
+
+        <!-- HERRAMIENTAS DE TALLER -->
+        <section class="tools-grid">
+            <div class="tool-card calculator">
+                <h3><i class="fa-solid fa-calculator"></i> Calculadora Ley de Ohm</h3>
+                <label>Calcular:</label>
+                <select id="ohmCalcType" onchange="calcularOhm()">
+                    <option value="v">Voltaje (V = I * R)</option>
+                    <option value="i">Corriente (I = V / R)</option>
+                    <option value="r">Resistencia (R = V / I)</option>
+                </select>
+                <input type="number" id="ohmVal1" placeholder="Voltaje (V)" oninput="calcularOhm()">
+                <input type="number" id="ohmVal2" placeholder="Corriente (A)" oninput="calcularOhm()">
+                <p id="ohmResult" style="font-weight: bold; color: var(--m1-color); margin-top: 0.5rem;">Resultado: -</p>
+            </div>
+
+            <div class="tool-card">
+                <h3><i class="fa-solid fa-stethoscope"></i> Diagnóstico Rápido PC</h3>
+                <select id="diagSelect" onchange="ejecutarDiagnostico()">
+                    <option value="">-- Selecciona el problema --</option>
+                    <option value="no-power">La PC no enciende (no giran abanicos)</option>
+                    <option value="no-video">Enciende pero no da imagen</option>
+                    <option value="blue-screen">Pantallazos azules en Windows</option>
+                    <option value="overheat">Se apaga tras unos minutos</option>
+                </select>
+                <p id="diagResult" style="margin-top: 1rem; font-size: 0.95rem; color: var(--text-muted);"></p>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 3 Y 4: MÓDULOS Y LISTA DE LECCIONES -->
+        <main id="modulesContainer">
+            <!-- Los módulos se renderizan dinámicamente con JavaScript -->
+        </main>
+    </div>
+
+    <!-- MODAL DE VISTA DETALLADA DE LECCIÓN -->
+    <div id="lessonModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="cerrarModal()">&times;</span>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <!-- SECCIÓN 6: ENLACES Y CONTACTO -->
+    <footer>
+        <div class="footer-content">
+            <div>
+                <h3 style="color: var(--m1-color); margin-bottom: 0.5rem;">S.R.PC</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Servicios de reparación de computadoras, laptops y capacitación técnica profesional.</p>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;"><i class="fa-solid fa-lock"></i> Sitio Web Seguro (HTTPS)</p>
+            </div>
+            <div>
+                <h4>Ubicación</h4>
+                <p style="color: var(--text-muted);"><i class="fa-solid fa-map-pin"></i> Santiago, Veraguas, Panamá</p>
+                <p style="color: var(--text-muted);"><i class="fa-solid fa-envelope"></i> contacto@srpc.com</p>
+            </div>
+            <div>
+                <h4>Síguenos / Contacto</h4>
+                <div class="social-links" style="margin-top: 0.5rem;">
+                    <a href="https://facebook.com" target="_blank"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="https://instagram.com" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://wa.me/50700000000" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="credits">
+            <p>Creado por: <strong>Carlos Robles</strong> | Total de Lecciones: <strong>215</strong></p>
+        </div>
+    </footer>
+
+    <!-- LOGICA JAVASCRIPT -->
+    <script>
+        const modulos = [
+            {
+                id: 1,
+                nombre: "⚡ MÓDULO I: ELECTRÓNICA BÁSICA",
+                claseColor: "m1-bg",
+                rango: "1–75",
+                lecciones: [
+                    { n: 1, t: "Electrónica Básica — Guía Teórica", k: "guia electronica basica completa", d: "Conceptos fundamentales y teoría inicial sobre la electrónica." },
+                    { n: 2, t: "¿Qué es la electricidad? — Parte 1", k: "que es la electricidad parte 1", d: "Estructura atómica y flujo de electrones." },
+                    { n: 3, t: "¿Qué es la electricidad? — Parte 2", k: "que es la electricidad parte 2", d: "Diferencia de potencial y campos eléctricos." },
+                    { n: 4, t: "Tipos de corriente: Continua y Alterna", k: "corriente continua y alterna", d: "Diferencias entre CC (DC) y CA (AC)." },
+                    { n: 5, t: "Magnitudes eléctricas — Parte 1", k: "voltaje corriente resistencia", d: "Relación entre Voltaje, Corriente y Resistencia." },
+                    { n: 6, t: "Magnitudes eléctricas — Parte 2", k: "potencia y energia electrica", d: "Potencia eléctrica (Watts) y consumo de energía." },
+                    { n: 7, t: "Proporcionalidad Inversa", k: "proporcionalidad en electronica", d: "Relación inversa entre resistencia e intensidad de corriente." },
+                    { n: 8, t: "Ley de Ohm", k: "ley de ohm explicada", d: "Fórmula V = I * R explicada paso a paso." },
+                    { n: 9, t: "Tipos de Componentes Electrónicos", k: "componentes electronicos basicos", d: "Componentes pasivos y activos." },
+                    { n: 10, t: "Resistencias y Código de Colores", k: "resistencias codigo de colores", d: "Lectura de bandas de color en resistores." },
+                    { n: 11, t: "Resistencias en Serie — Parte 1", k: "resistencias en serie", d: "Cálculo de resistencia equivalente en serie." },
+                    { n: 12, t: "Resistencias en Paralelo — Parte 2", k: "resistencias en paralelo", d: "Cálculo de resistencia equivalente en paralelo." },
+                    { n: 13, t: "Circuitos Mixtos — Parte 3", k: "circuito mixto serie paralelo", d: "Resolución de circuitos combinados." },
+                    { n: 14, t: "Potenciómetros — Parte 1", k: "potenciometro parte 1", d: "Funcionamiento de resistencias variables." },
+                    { n: 15, t: "Potenciómetros — Parte 2", k: "conectar potenciometro", d: "Formas correctas de conexión de un potenciómetro." },
+                    { n: 16, t: "Potenciómetros — Parte 3", k: "aplicaciones potenciometro", d: "Uso como divisor de voltaje y reóstato." },
+                    { n: 17, t: "Potenciómetros — Parte 4", k: "calibracion potenciometro", d: "Calibración y fallas comunes." },
+                    { n: 18, t: "Capacitores — Parte 1", k: "condensador parte 1", d: "Principios de almacenamiento de carga eléctrica." },
+                    { n: 19, t: "Capacitores — Parte 2", k: "carga y descarga condensador", d: "Curva de carga y descarga en capacitores." },
+                    { n: 20, t: "Capacitores — Parte 3", k: "tipos de capacitores", d: "Capacitores electrolíticos, cerámicos y de tántalo." },
+                    { n: 21, t: "Capacitores — Parte 4", k: "capacitores en serie y paralelo", d: "Cálculo de capacitancia total." },
+                    { n: 22, t: "Símbolos Eléctricos", k: "simbolos electricos estandar", d: "Simbología estandarizada en esquemas." },
+                    { n: 23, t: "Diodos — Parte 1", k: "diodo union pn", d: "Física del diodo semiconductores unión PN." },
+                    { n: 24, t: "Diodos — Parte 2", k: "curva caracteristica diodo", d: "Polarización directa e inversa." },
+                    { n: 25, t: "Diodos — Parte 3", k: "diodo rectificador", d: "Uso del diodo en rectificación." },
+                    { n: 26, t: "Diodos — Parte 4", k: "rectificador onda completa", d: "Rectificación de media onda y onda completa." },
+                    { n: 27, t: "Diodos — Parte 5", k: "puente de diodos", d: "Puente rectificador de Graetz." },
+                    { n: 28, t: "Diodos — Parte 6", k: "diodo zener", d: "Regulación de voltaje con diodo Zener." },
+                    { n: 29, t: "Diodos — Parte 7", k: "diodo led", d: "Principios de diodos emisores de luz." },
+                    { n: 30, t: "Diodos — Parte 8", k: "probar diodos con multimetro", d: "Prueba de juntura PN con multímetro." },
+                    { n: 31, t: "Transistores — Parte 1", k: "transistor bjt npn pnp", d: "Estructura BJT NPN y PNP." },
+                    { n: 32, t: "Transistores — Parte 2", k: "modos de operación transistor", d: "Corte, saturación y zona activa." },
+                    { n: 33, t: "Transistores — Parte 3", k: "curvas transistor", d: "Análisis de curvas de características." },
+                    { n: 34, t: "Transistores — Parte 4", k: "configuraciones transistor", d: "Emisor común, base común y colector común." },
+                    { n: 35, t: "Transistores — Parte 5", k: "polarizacion transistor", d: "Circuitos de polarización en corriente continua." },
+                    { n: 36, t: "Transistores — Parte 6", k: "transistor como interruptor", d: "Uso como switch electrónico." },
+                    { n: 37, t: "Tiristores — Parte 1", k: "tiristor scr", d: "Rectificador controlado de silicio (SCR)." },
+                    { n: 38, t: "Tiristores — Parte 2", k: "triac control de potencia", d: "Funcionamiento del TRIAC en corriente alterna." },
+                    { n: 39, t: "Fusibles — Parte 1", k: "fusibles funcionamiento", d: "Protección contra sobrecorriente." },
+                    { n: 40, t: "Fusibles — Parte 2", k: "seleccionar y reemplazar fusible", d: "Tipos de acción rápida y lenta." },
+                    { n: 41, t: "Bobinas — Parte 1", k: "inductancia y bobinas", d: "Principios de inductancia y campo magnético." },
+                    { n: 42, t: "Bobinas — Parte 2", k: "bobina en ca y cc", d: "Comportamiento según el tipo de corriente." },
+                    { n: 43, t: "Bobinas — Parte 3", k: "factor de calidad bobina", d: "Reactancia inductiva y factor Q." },
+                    { n: 44, t: "Bobinas — Parte 4", k: "transformadores principio", d: "Inducción mutua y transformadores." },
+                    { n: 45, t: "Bobinas — Parte 5", k: "probar transformadores", d: "Diagnóstico de devanados." },
+                    { n: 46, t: "Relés — Parte 1", k: "rele funcionamiento", d: "Conmutación electromecánica." },
+                    { n: 47, t: "Relés — Parte 2", k: "conectar rele", d: "Conexión de pines NC, NO y COM." },
+                    { n: 48, t: "Relés — Parte 3", k: "tipos de reles", d: "Relés de estado sólido y electromecánicos." },
+                    { n: 49, t: "Relés — Parte 4", k: "proteccion rele diodo", d: "Diodo de protección (Flyback) en bobinas." },
+                    { n: 50, t: "Relés — Parte 5", k: "circuitos con reles", d: "Proyectos prácticos de control." },
+                    { n: 51, t: "Relés — Parte 6", k: "reles temporizados", d: "Lógica de temporización." },
+                    { n: 52, t: "Relés — Parte 7", k: "mantenimiento y fallas reles", d: "Fallas por chispeo y desgaste." },
+                    { n: 53, t: "Optoacopladores — Parte 1", k: "optoacoplador principio", d: "Aislamiento óptico entre etapas." },
+                    { n: 54, t: "Optoacopladores — Parte 2", k: "usar optoacoplador", d: "Uso en fuentes conmutadas." },
+                    { n: 55, t: "Osciladores — Parte 1", k: "osciladores rc", d: "Generación de señales senoidales y cuadradas." },
+                    { n: 56, t: "Osciladores — Parte 2", k: "osciladores lc y cristal", d: "Osciladores de cristal de cuarzo." },
+                    { n: 57, t: "Circuitos Integrados", k: "circuito integrado estructura", d: "Tecnología de empaquetado e integración." },
+                    { n: 58, t: "Baterías", k: "baterias tipos y carga", d: "Baterías de Litio, Plomo y NiMH." },
+                    { n: 59, t: "Análisis de Circuitos", k: "analisis de circuitos electricos", d: "Métodos sistemáticos de análisis." },
+                    { n: 60, t: "Partes de un Circuito — Parte 1", k: "elementos de un circuito", d: "Ramas, nodos y mallas." },
+                    { n: 61, t: "Partes de un Circuito — Parte 2", k: "nodos y mallas kirchhoff", d: "Leyes de Kirchhoff (KVL y KCL)." },
+                    { n: 62, t: "Masa y Tierra — Parte 1", k: "referencia de masa electricidad", d: "Diferencia entre masa chasis y tierra física." },
+                    { n: 63, t: "Masa y Tierra — Parte 2", k: "conexión a tierra seguridad", d: "Protección contra descargas ESD." },
+                    { n: 64, t: "Fuentes — Parte 1", k: "fuente de alimentacion tipos", d: "Fuentes lineales vs fuentes conmutadas." },
+                    { n: 65, t: "Fuentes — Parte 2", k: "rectificacion y filtro fuente", d: "Uso de condensadores de filtrado." },
+                    { n: 66, t: "Fuentes — Parte 3", k: "regulacion de tension fuente", d: "Integrados reguladores serie LM78xx." },
+                    { n: 67, t: "Práctica — Herramientas de Taller", k: "herramientas electronica taller", d: "Equipamiento esencial para reparación." },
+                    { n: 68, t: "Práctica — Multímetro", k: "uso del multimetro", d: "Medición de voltaje, corriente, continuidad y resistencia." },
+                    { n: 69, t: "Práctica — Soldadura", k: "tecnica de soldadura", d: "Soldadura estaño-plomo y libre de plomo." },
+                    { n: 70, t: "Práctica — Fuente Regulada", k: "montar fuente regulada", d: "Proyecto práctico de taller." },
+                    { n: 71, t: "Práctica — Microscopio", k: "microscopio para componentes", d: "Uso de microscopio trinocular para SMD." },
+                    { n: 72, t: "Práctica — Fuente Montaje 1", k: "ensamblar fuente parte 1", d: "Montaje físico del circuito regulador." },
+                    { n: 73, t: "Práctica — Fuente Montaje 2", k: "soldadura fuente parte 2", d: "Técnicas de soldadura en placa PCB." },
+                    { n: 74, t: "Práctica — Fuente Prueba 3", k: "pruebas y mediciones fuente", d: "Verificación de voltajes de salida." },
+                    { n: 75, t: "Práctica — Fuente Protección 4", k: "proteccion cortocircuito fuente", d: "Prueba del sistema de corte por sobrecarga." }
+                ]
+            },
+            {
+                id: 2,
+                nombre: "💻 MÓDULO II: REPARACIÓN DE COMPUTADORAS",
+                claseColor: "m2-bg",
+                rango: "76–133",
+                lecciones: [
+                    { n: 76, t: "Componentes — Introducción", k: "componentes computadora introduccion", d: "Visión general de la arquitectura del PC." },
+                    { n: 77, t: "Microprocesadores", k: "procesador cpu funcionamiento", d: "Arquitectura x86, núcleos, hilos y frecuencias." },
+                    { n: 78, t: "Placa Madre — Parte 1", k: "placa madre puertos y ranuras", d: "Puertos de expansión PCIe, slots RAM e I/O." },
+                    { n: 79, t: "Placa Madre — Parte 2", k: "chipset y buses placa madre", d: "Puentes Norte y Sur, líneas de PCIe." },
+                    { n: 80, t: "Placa Madre — Parte 3", k: "alimentacion placa madre", d: "Conectores ATX 24 pines y EPS 12V." },
+                    { n: 81, t: "Placa Madre — Parte 4", k: "formatos placa madre atx", d: "Factor de forma E-ATX, ATX, Micro-ATX, Mini-ITX." },
+                    { n: 82, t: "Memoria RAM", k: "memoria ram tipos y uso", d: "Evolución DDR1 a DDR5, frecuencias y latencias." },
+                    { n: 83, t: "Tarjeta de Video", k: "tarjeta grafica gpu explicacion", d: "Arquitectura GPU, memoria VRAM e interfaz." },
+                    { n: 84, t: "Fuente de Poder PC", k: "fuente de poder computadora", d: "Certificación 80 Plus, rieles de 12V, 5V y 3.3V." },
+                    { n: 85, t: "Almacenamiento HDD SSD", k: "diferencias hdd ssd m2", d: "Diferencias mecánicas vs SSD SATA y NVMe M.2." },
+                    { n: 86, t: "Redes y Conexión", k: "tarjeta de red y configuracion", d: "Tarjetas de red Ethernet RJ45 y WiFi." },
+                    { n: 87, t: "BIOS y UEFI", k: "bios uefi para que sirve", d: "Diferencias entre el sistema heredado BIOS y UEFI." },
+                    { n: 88, t: "Arranque y Seguridad UEFI", k: "arranque seguro uefi", d: "Secure Boot, TPM 2.0 y tablas GPT." },
+                    { n: 89, t: "Ensamble DDR1", k: "armar pc ddr1 paso a paso", d: "Montaje de equipos legacy." },
+                    { n: 90, t: "Ensamble DDR1 — Parte 2", k: "instalar procesador ddr1", d: "Socket antiguos y disipadores con clip." },
+                    { n: 91, t: "Ensamble DDR2", k: "ensamblar pc ddr2", d: "Paso a paso para montar plataformas DDR2." },
+                    { n: 92, t: "Ensamble DDR3", k: "montar pc ddr3", d: "Montaje completo plataforma LGA1155/AM3+." },
+                    { n: 93, t: "Ensamble DDR3 — Parte 2", k: "refrigeracion pc ddr3", d: "Instalación de cooler stock y pasta térmica." },
+                    { n: 94, t: "PC Alto Rendimiento 1", k: "elegir componentes pc potente", d: "Dimensionamiento de hardware para Gaming/Render." },
+                    { n: 95, t: "PC Alto Rendimiento 2", k: "montaje pc alto rendimiento", d: "Gestión de cables, flujo de aire y refrigeración líquida." },
+                    { n: 96, t: "PC Alto Rendimiento 3", k: "configuracion bios pc alto rendimiento", d: "Activación de perfiles XMP/DOCP y curvas de fans." },
+                    { n: 97, t: "Mantenimiento y Limpieza", k: "limpieza interna pc y pasta termica", d: "Mantenimiento preventivo, aire comprimido y alcohol isopropílico." },
+                    { n: 98, t: "Windows 11 — Escritorio", k: "escritorio windows 11 basico", d: "Navegación e interfaz actualizada." },
+                    { n: 99, t: "Windows 11 — CMD", k: "comandos basicos cmd", d: "Consola de comandos y comandos básicos." },
+                    { n: 100, t: "Windows 11 — Barra de Tareas", k: "usar barra de tareas windows 11", d: "Personalización y optimización de productividad." },
+                    { n: 101, t: "Windows 32 vs 64 bits", k: "diferencia 32 y 64 bits sistema", d: "Gestión de memoria RAM más allá de 4GB." },
+                    { n: 102, t: "Carpetas del Sistema", k: "carpetas importantes de windows", d: "Estructura de System32, Program Files, AppData." },
+                    { n: 103, t: "Instalar y Desinstalar Programas", k: "gestionar programas en windows", d: "Gestión limpia de software sin dejar residuos." },
+                    { n: 104, t: "Cuentas de Usuario", k: "tipos de cuenta y permisos windows", d: "Cuentas locales vs Microsoft, permisos UAC." },
+                    { n: 105, t: "Directorio Windows", k: "estructura carpeta windows", d: "Organización de registros y librerías." },
+                    { n: 106, t: "Comandos de Consola", k: "comandos utiles cmd lista", d: "Uso de sfc /scannow, chkdsk y ipconfig." },
+                    { n: 107, t: "Panel de Control — Sistema", k: "panel de control sistema y seguridad", d: "Configuración avanzada del SO." },
+                    { n: 108, t: "Cortafuegos y Protección", k: "configurar firewall windows defender", d: "Reglas de entrada/salida y seguridad local." },
+                    { n: 109, t: "Sistema — Rendimiento", k: "rendimiento y propiedades sistema", d: "Ajuste de efectos visuales y memoria virtual." },
+                    { n: 110, t: "Dispositivos y Controladores", k: "administrador de dispositivos", d: "Instalación y actualización de drivers." },
+                    { n: 111, t: "Puntos de Restauración", k: "crear y restaurar puntos de sistema", d: "Recuperación del sistema ante fallas de software." },
+                    { n: 112, t: "Redes — Configuración IP", k: "cambiar direccion ip y dns", d: "Asignación de IP estática y servidores DNS." },
+                    { n: 113, t: "Hardware y Audio", k: "dispositivos impresoras y sonido", d: "Resolución de problemas de periféricos y audio." },
+                    { n: 114, t: "Programas y Características", k: "desinstalar reparar programas", d: "Reparación de paquetes redistribuibles C++." },
+                    { n: 115, t: "Cuentas y Contraseñas", k: "administrar cuentas de usuario", d: "Gestión de credenciales de seguridad." },
+                    { n: 116, t: "Personalización de Windows", k: "fondo temas y apariencia", d: "Ajuste del entorno gráfico de trabajo." },
+                    { n: 117, t: "Idioma y Accesibilidad", k: "cambiar idioma y herramientas accesibilidad", d: "Configuración regional e idioma de entrada." },
+                    { n: 118, t: "Protección contra Virus", k: "prevenir y eliminar malware", d: "Detección y eliminación de código malicioso." },
+                    { n: 119, t: "Instalar Windows 11 desde USB", k: "instalar windows 11 paso a paso", d: "Creación de USB booteable con Rufus e instalación limpia." },
+                    { n: 120, t: "Copias de Seguridad", k: "crear copia de respaldo windows", d: "Estrategias de backup de información." },
+                    { n: 121, t: "Reparar Arranque Windows", k: "reparar arranque cuando no enciende", d: "Uso de bootrec /fixmbr y reconstrucción de BCD." },
+                    { n: 122, t: "Introducción a Linux Ubuntu", k: "primeros pasos en ubuntu", d: "Instalación y uso básico de Linux." },
+                    { n: 123, t: "Hiren’s Boot CD USB", k: "crear usb de rescate hirens boot", d: "Herramientas de rescate de archivos y diagnóstico." },
+                    { n: 124, t: "Máquinas Virtuales VirtualBox", k: "instalar y usar virtualbox", d: "Creación de entornos de prueba aislados." },
+                    { n: 125, t: "Acceso Remoto", k: "escritorio remoto configuracion", d: "Soporte técnico usando Anydesk o RDP." },
+                    { n: 126, t: "Programas Esenciales", k: "programas gratuitos imprescindibles", d: "Software base obligatorio tras formatear." },
+                    { n: 127, t: "Respaldo de Archivos", k: "estrategias de copia de seguridad", d: "Regla de respaldo 3-2-1." },
+                    { n: 128, t: "Monitorear PC — Parte 1", k: "ver temperatura y uso de recursos", d: "Uso de HWMonitor y Task Manager." },
+                    { n: 129, t: "Monitorear PC — Parte 2", k: "mejores programas monitoreo", d: "AIDA64 y CrystalDiskInfo para diagnósticos." },
+                    { n: 130, t: "Simulador de Ensamble", k: "simulador armar computadora virtual", d: "Práctica en simuladores interactivos 3D." },
+                    { n: 131, t: "Diagnóstico de Red", k: "comandos ping y tracert red", d: "Pruebas de conectividad y descarte de fallas." },
+                    { n: 132, t: "Desarmar Laptop — Parte 1", k: "desensamblar laptop paso a paso", d: "Técnicas de apertura de carcasas sin romper clips." },
+                    { n: 133, t: "Reparar Laptop — Parte 2", k: "cambiar disco bateria y memoria laptop", d: "Upgrade de hardware en computadoras portátiles." }
+                ]
+            },
+            {
+                id: 3,
+                nombre: "📓 MÓDULO III: ELECTRÓNICA DE COMPUTADORAS",
+                claseColor: "m3-bg",
+                rango: "134–149",
+                lecciones: [
+                    { n: 134, t: "Electrónica de Computadoras — 1.1 Introducción", k: "introduccion electronica de computadoras reparacion", d: "Análisis a nivel de componente en motherboards." },
+                    { n: 135, t: "Electrónica de Placa Madre — Parte 1", k: "electronica de placa madre explicacion parte 1", d: "Fuentes de alimentación de fases VRM." },
+                    { n: 136, t: "Electrónica de Placa Madre — Parte 2", k: "circuitos y alimentacion placa madre parte 2", d: "Mosfets de alta, baja y controladores PWM." },
+                    { n: 137, t: "Electrónica de Placa Madre — Parte 3", k: "mediciones y puntos de prueba placa madre parte 3", d: "Uso del multímetro e inyectora de voltaje." },
+                    { n: 138, t: "Electrónica de Placa Madre — Parte 4", k: "fallas comunes y diagnostico placa madre parte 4", d: "Localización de componentes que se calientan excesivamente." },
+                    { n: 139, t: "Reparación 1 — Asus A320M-K en fuga", k: "reparar asus a320m-k fuga de corriente", d: "Caso real: Detección y solución de fugas." },
+                    { n: 140, t: "Reparación 2 — Asus A320 en corto", k: "reparar asus a320 cortocircuito placa", d: "Caso real: Eliminación de cortocircuito principal." },
+                    { n: 141, t: "Reparación 3 — MSI A320 Parte 1", k: "diagnostico msi a320 no enciende parte 1", d: "Caso real: Placa muerta no responde al botón de encendido." },
+                    { n: 142, t: "Reparación 4 — MSI A320 Parte 2", k: "reparacion componentes msi a320 parte 2", d: "Sustitución de controlador de stand-by." },
+                    { n: 143, t: "Reparación 5 — Aorus Elite B450 Parte 1", k: "diagnostico aorus elite b450 no da imagen parte 1", d: "Medición de sub-fuentes RAM y chipset." },
+                    { n: 144, t: "Reparación 6 — Aorus Elite B450 Parte 2", k: "reparacion final aorus elite b450 parte 2", d: "Reemplazo de componente defectuoso y prueba final." },
+                    { n: 145, t: "Reparación 7 — Ryzen 5 3600 Pines Doblados", k: "enderezar pines procesador ryzen 5 3600", d: "Técnica micromecánica para reparar pines en procesadores PGA." },
+                    { n: 146, t: "Reparación 8 — Teclado Razer", k: "reparar teclado razer no funciona teclas", d: "Reparación de pistas y switches mecánicos." },
+                    { n: 147, t: "Reparación 9 — EVGA RTX 2060 Reemplazo VRAM", k: "reemplazar memoria vram tarjeta video evga rtx 2060", d: "Proceso de Reballing de módulo de memoria VRAM." },
+                    { n: 148, t: "Reparación 10 — Tarjeta de Video RX 570", k: "reparar tarjeta de video rx 570 no da señal", d: "Reparación de etapa de alimentación GPU." },
+                    { n: 149, t: "Reparación 11 — MSI A320 Sin Red", k: "reparar puerto de red msi a320 no conecta", d: "Reemplazo de chip integrado Ethernet de superficie." }
+                ]
+            },
+            {
+                id: 4,
+                nombre: "🖥️ MÓDULO IV: ELECTRÓNICA DE LAPTOPS",
+                claseColor: "m4-bg",
+                rango: "150–179",
+                lecciones: [
+                    { n: 150, t: "Electrónica de Laptops — 1. Introducción", k: "introduccion electronica de laptops componentes y esquemas", d: "Análisis de arquitecturas móviles y diferencias con PC." },
+                    { n: 151, t: "Electrónica de Laptops — 2. Componentes Pasivos", k: "componentes pasivos en placas de laptop resistencias condensadores", d: "Condensadores SMD y resistencias de precisión." },
+                    { n: 152, t: "Electrónica de Laptops — 3. Componentes Activos", k: "componentes activos laptop diodos transistores mosfet", d: "MOSFETs de canal N y P en esquemas portátiles." },
+                    { n: 153, t: "Electrónica de Laptops — 4. Microcontroladores", k: "microcontroladores en placas de laptop funcionamiento y roles", d: "Funcionamiento del Embedded Controller (EC / KBC)." },
+                    { n: 154, t: "Electrónica de Laptops — 5. Señales que vienen y van", k: "senales electricas placas laptop entrada salida comunicacion", d: "Secuencia de encendido y señales de comunicación." },
+                    { n: 155, t: "Electrónica de Laptops — 6. No es la pila de BIOS", k: "no siempre es la pila bios fallas comunes confundir", d: "Diagnóstico real de problemas de retención de configuración." },
+                    { n: 156, t: "Electrónica de Laptops — 7. Boardviews", k: "leer boardviews y esquemas placas laptop guia practica", d: "Uso de software OpenBoardView para localizar componentes." },
+                    { n: 157, t: "Electrónica de Laptops — 8. Arquitecturas", k: "arquitectura general placa laptop buses alimentacion relojes", d: "Etapas de potencia siempre presentes (ALWAYS) y suspendidas." },
+                    { n: 158, t: "Electrónica de Laptops — 9. Arquitecturas Parte 2", k: "arquitectura laptop buses de datos controladores etapas", d: "Secuencia de potencia completa desde cargador hasta estado S0." },
+                    { n: 159, t: "Electrónica de Laptops — 10. Primeras Mediciones", k: "primeras mediciones multimetro placa laptop puntos clave", d: "Revisión de impedancias en bobinas principales." },
+                    { n: 160, t: "Electrónica de Laptops — 11. Análisis Esquema Parte 2", k: "analizar esquema motherboard laptop mediciones continuacion", d: "Interpretación de diagramas esquemáticos." },
+                    { n: 161, t: "Electrónica de Laptops — 12. Primeras Mediciones Parte 3", k: "mediciones avanzadas placa laptop senales y tensiones", d: "Medición de oscilaciones con osciloscopio en el taller." },
+                    { n: 162, t: "Electrónica de Laptops — 13. Baja Impedancia o Corto", k: "detectar corto circuito baja impedancia placa laptop", d: "Diferencia entre líneas de bajo ohmapaje (CPU/GPU) y cortocircuito real." },
+                    { n: 163, t: "Electrónica de Laptops — 14. Protocolo ACPI", k: "protocolo acpi gestion energia encendido laptop explicacion", d: "Estados de energía S0, S3, S4 y S5 en laptops." },
+                    { n: 164, t: "Análisis Circuitos — 0. Introducción", k: "introduccion analisis circuitos principales placa laptop", d: "Identificación de la línea de entrada principal (VIN / B+)." },
+                    { n: 165, t: "Análisis Circuitos — 1. Entrada de Voltajes", k: "etapa entrada voltaje alimentacion placa laptop", d: "Entrada del jack DC y protección por diodo de avalancha." },
+                    { n: 166, t: "Análisis Circuitos — 2. Detección del Cargador", k: "circuito deteccion cargador laptop como funciona", d: "Circuitos divisores de tensión para habilitar el cargador." },
+                    { n: 167, t: "Análisis Circuitos — 3. Circuito Canal P", k: "circuito canal p mosfet alimentacion laptop explicacion", d: "Mosfets Canal P en conmutación de entrada." },
+                    { n: 168, t: "Análisis Circuitos — 4. Fallas PACIN y ACIN", k: "fallas pacin acin placa laptop causas y reparacion", d: "Señales de presencia de adaptador de corriente alterna." },
+                    { n: 169, t: "Análisis Circuitos — 5. ACOFF y Mosfet de Batería", k: "acoff y mosfet bateria laptop circuito y fallas", d: "Conmutación automática entre batería y cargador." },
+                    { n: 170, t: "Análisis Circuitos — 6. Sistemas de Entrada", k: "sistemas de entrada de alimentacion placa laptop variantes", d: "Diferentes filosofías de diseño (Lenovo, Dell, HP)." },
+                    { n: 171, t: "Análisis Circuitos — 7. IC Charger", k: "circuito integrado cargador laptop funcionamiento y fallas", d: "Integrados controladores de carga (ISL, BQ)." },
+                    { n: 172, t: "Análisis Circuitos — 8. Carga de Batería", k: "proceso de carga bateria laptop etapas y mediciones", d: "Corriente constante y voltaje constante durante la carga." },
+                    { n: 173, t: "Curso Profesor Mateo — Introducción", k: "introduccion electronica laptops por profesor mateo curso completo", d: "Lección magistral sobre fundamentos aplicados." },
+                    { n: 174, t: "Ejemplo Práctico 1", k: "ejemplo practico reparacion laptop 1 diagnostico", d: "Reparación real: Laptop no enciende y calienta el cargador." },
+                    { n: 175, t: "Ejemplo Práctico 2", k: "ejemplo reparacion laptop 2 componentes y mediciones", d: "Diagnóstico de falla en etapa de 3.3V / 5V Always." },
+                    { n: 176, t: "Ejemplo Práctico 3", k: "ejemplo reparacion laptop 3 solucion de falla", d: "Sustitución de capacitor SMD en corto en línea principal." },
+                    { n: 177, t: "Ejemplo Práctico 4", k: "ejemplo reparacion laptop 4 falla compleja resuelta", d: "Falla de encendido por bios corrupta en memoria SPI." },
+                    { n: 178, t: "Reparación: Pines Doblados Ryzen 5 3600", k: "enderezar pines procesador ryzen 5 3600 reparacion", d: "Procedimiento detallado de alineación de pines." },
+                    { n: 179, t: "Reparación: Teclado Razer", k: "reparar teclado razer reemplazo de teclas", d: "Limpieza ultrasónica y reparación de interruptores." }
+                ]
+            },
+            {
+                id: 5,
+                nombre: "🐍 MÓDULO V: CURSO COMPLETÍSIMO DE PYTHON",
+                claseColor: "m5-bg",
+                rango: "180–215",
+                lecciones: [
+                    { n: 180, t: "1.1 ¿Qué es Python?", k: "que es python introduccion para principiantes", d: "Lenguaje interpretado, de alto nivel y multiparadigma creado por Guido van Rossum en 1991." },
+                    { n: 181, t: "1.2 Características de Python", k: "caracteristicas principales de python explicacion", d: "Sintaxis limpia, gratis, multiplataforma, gran biblioteca estándar y extensible en C/C++." },
+                    { n: 182, t: "1.3 Aplicaciones de Python", k: "para que sirve python ejemplos aplicaciones reales", d: "Desarrollo web, IA, automatización, análisis de datos, robótica y scripts." },
+                    { n: 183, t: "1.4 Instalación de Python", k: "instalar python en windows paso a paso add to path", d: "Descarga de python.org y la importancia crítica de marcar 'Add Python to PATH'." },
+                    { n: 184, t: "1.5 Primer programa en Python", k: "primer programa hola mundo python paso a paso", d: "Uso de print('Hola Mundo') y sintaxis básica." },
+                    { n: 185, t: "2.1 Módulos en Python", k: "modulos en python crear e importar explicacion", d: "Reutilización de código con import os, sys, math." },
+                    { n: 186, t: "2.2 Comentarios en Python", k: "comentarios en python una y varias lineas buenas practicas", d: "Uso de # para comentarios simples y comillas triples para docstrings." },
+                    { n: 187, t: "2.3 ¿Qué es Pip?", k: "que es pip en python como instalar y usar", d: "Gestor de paquetes oficiales para instalar librerías externas." },
+                    { n: 188, t: "3.1 Variables en Python", k: "variables en python declarar y asignar valores", d: "Reglas para crear identificadores y asignación dinámica de tipos." },
+                    { n: 189, t: "3.2 Tipos de datos en Python", k: "tipos de datos en python explicacion completa", d: "int, float, str, bool, list, tuple, dict, set." },
+                    { n: 190, t: "3.3 Palabras clave en Python", k: "palabras reservadas en python cuales son y no usar", d: "Keywords reservadas como if, else, for, while, def, class." },
+                    { n: 191, t: "3.4 Identificadores en Python", k: "identificadores en python reglas para nombrar", d: "Convenciones de nombres snake_case y sensibilidad a mayúsculas." },
+                    { n: 192, t: "3.5 Operadores en Python", k: "operadores en python aritmeticos logicos comparacion", d: "Aritméticos (+, -, *), lógicos (and, or, not) y de comparación (==, !=)." },
+                    { n: 193, t: "4.1 Números", k: "numeros en python int float operaciones conversion", d: "Operaciones matemáticas, enteros, flotantes y conversiones con int() y float()." },
+                    { n: 194, t: "4.2 Cadenas de caracteres", k: "cadenas de texto en python metodos y manipulacion", d: "Manipulación de cadenas, upper(), lower(), replace() y strip()." },
+                    { n: 195, t: "4.3 Diccionario", k: "diccionarios en python clave valor recorrer", d: "Estructuras de datos clave-valor para almacenamiento dinámico." },
+                    { n: 196, t: "4.4 Conjunto", k: "conjuntos en python sets union interseccion", d: "Colecciones sin orden ni duplicados (set), operaciones de unión e intersección." },
+                    { n: 197, t: "4.5 Tupla", k: "tuplas en python inmutables cuando usarlas", d: "Colecciones inmutables, más rápidas que las listas y de uso seguro." },
+                    { n: 198, t: "4.6 Booleano", k: "valores booleanos en python true false condicionales", d: "Valores True y False, evaluación lógica y valores considerados falsos." },
+                    { n: 199, t: "5.1 Sentencia if", k: "sentencia if en python condicion simple sangria", d: "Condicionales simples y la regla de indentación (sangría) obligatoria." },
+                    { n: 200, t: "5.2 Sentencia if-else", k: "if else en python dos caminos condicion", d: "Toma de decisiones bifurcada entre dos caminos." },
+                    { n: 201, t: "5.3 Sentencia elif", k: "elif en python multiples condiciones orden", d: "Evaluación de múltiples condiciones consecutivas." },
+                    { n: 202, t: "5.4 Sentencia if anidada", k: "if anidados en python estructuras condicionales dentro", d: "Estructuras de decisión multinivel de forma limpia." },
+                    { n: 203, t: "6.1 Bucle while", k: "bucle while en python repeticion condicion y salir", d: "Repetición basada en condición y cómo evitar bucles infinitos." },
+                    { n: 204, t: "6.2 Bucle for", k: "bucle for en python recorrer listas y cadenas", d: "Iteración sobre listas, tuplas, cadenas y secuencias." },
+                    { n: 205, t: "6.2.1 Bucle for con range()", k: "funcion range en python bucle for con numeros", d: "Generación de secuencias numéricas iterativas." },
+                    { n: 206, t: "6.2.2 Bucle for anidado", k: "bucles for anidados en python tablas y matrices", d: "Uso de bucles dentro de bucles para matrices y tablas." },
+                    { n: 207, t: "7.1 Indexación y segmentación de cadenas", k: "indexacion y corte de cadenas en python slicing", d: "Acceso a caracteres y slicing [inicio:fin:paso]." },
+                    { n: 208, t: "7.2 Formato de cadenas", k: "formato de cadenas en python f-strings ejemplos", d: "Uso moderno de F-Strings para formatear texto fácilmente." },
+                    { n: 209, t: "7.3 Operaciones comunes con cadenas", k: "metodos de cadenas en python operaciones mas usadas", d: "Métodos split(), join(), find() y count()." },
+                    { n: 210, t: "8.1 ¿Qué es una función?", k: "que es una funcion en python para que sirve reutilizar codigo", d: "Bloques de código reutilizable mediante def." },
+                    { n: 211, t: "8.2 Creación y llamada de funciones", k: "crear y llamar funciones en python definicion y uso", d: "Paso de parámetros y ejecución de funciones." },
+                    { n: 212, t: "8.3 Sentencia return", k: "sentencia return en python devolver valores desde funcion", d: "Devolución de uno o más valores procesados por la función." },
+                    { n: 213, t: "8.4 Ámbito de las variables", k: "ambito de variables en python local y global explicacion", d: "Diferencia entre variables locales y globales." },
+                    { n: 214, t: "8.5 Funciones lambda", k: "funciones lambda en python expresiones cortas sin def", d: "Funciones anónimas y rápidas en una sola línea." },
+                    { n: 215, t: "8.6 Arreglos / Listas en Python", k: "listas en python arreglos metodos y operaciones completas", d: "Manipulación completa de listas con append(), pop(), sort() y len()." }
+                ]
+            }
+        ];
+
+        // RENDERIZAR MÓDULOS Y LECCIONES EN PANTALLA
+        function renderizarModulos(datos = modulos) {
+            const container = document.getElementById('modulesContainer');
+            container.innerHTML = '';
+
+            let totalEncontradas = 0;
+
+            datos.forEach(mod => {
+                if (mod.lecciones.length === 0) return;
+
+                totalEncontradas += mod.lecciones.length;
+
+                const modHeader = document.createElement('div');
+                modHeader.className = `module-header ${mod.claseColor}`;
+                modHeader.innerHTML = `
+                    <span>${mod.nombre}</span>
+                    <span style="font-size:0.9rem; opacity:0.8;">(${mod.lecciones.length} lecciones)</span>
+                `;
+                container.appendChild(modHeader);
+
+                const grid = document.createElement('div');
+                grid.className = 'lessons-grid';
+
+                mod.lecciones.forEach(les => {
+                    const card = document.createElement('div');
+                    card.className = 'lesson-card';
+                    card.onclick = () => abrirModal(les);
+                    card.innerHTML = `
+                        <div class="lesson-number">LECCIÓN ${les.n}</div>
+                        <div class="lesson-title">${les.t}</div>
+                    `;
+                    grid.appendChild(card);
+                });
+
+                container.appendChild(grid);
+            });
+
+            if (totalEncontradas === 0) {
+                container.innerHTML = `
+                    <div style="text-align:center; padding: 3rem; color: var(--text-muted);">
+                        <i class="fa-solid fa-triangle-exclamation" style="font-size: 2.5rem; color: var(--m3-color);"></i>
+                        <p style="margin-top: 1rem; font-size:1.2rem; color: #fff;">No se encontró esa lección</p>
+                        <p style="font-size:0.9rem; color: var(--text-muted); margin-top:0.3rem;">Intenta buscar por otro número, palabra clave o nombre.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // BUSCADOR FLEXIBLE (POR NÚMERO, NOMBRE, PALABRAS O COINCIDENCIAS)
+        function filtrarLecciones() {
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+
+            if (!query) {
+                renderizarModulos(modulos);
+                return;
+            }
+
+            const modulosFiltrados = modulos.map(mod => {
+                const leccionesFiltradas = mod.lecciones.filter(les => {
+                    // Normalizamos acentos para que encuentre coincidencias incluso sin tildes
+                    const busqueda = query.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                    const titulo = les.t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                    const palabrasClave = les.k.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                    const descripcion = les.d.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                    const numeroStr = les.n.toString();
+
+                    return numeroStr.includes(busqueda) ||
+                           titulo.includes(busqueda) ||
+                           palabrasClave.includes(busqueda) ||
+                           descripcion.includes(busqueda);
+                });
+                return { ...mod, lecciones: leccionesFiltradas };
+            });
+
+            renderizarModulos(modulosFiltrados);
+        }
+
+        // ABRIR Y MOSTRAR DETALLE DE LA LECCIÓN (MODAL)
+        function abrirModal(leccion) {
+            const modal = document.getElementById('lessonModal');
+            const body = document.getElementById('modalBody');
+            
+            const ytSearchUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(leccion.k)}`;
+
+            body.innerHTML = `
+                <div style="font-size:0.9rem; color: var(--m1-color); font-weight:bold;">LECCIÓN Nº ${leccion.n}</div>
+                <h2 style="margin: 0.5rem 0 1rem 0; color:#fff;">${leccion.t}</h2>
+                <p style="color: var(--text-light); margin-bottom: 1rem; font-size: 1.05rem;">${leccion.d}</p>
+                <div style="background: rgba(255,255,255,0.05); padding: 0.8rem; border-radius: 5px; font-size:0.85rem; color: var(--text-muted);">
+                    <strong>Palabra clave para video:</strong> <code>${leccion.k}</code>
+                </div>
+                <a href="${ytSearchUrl}" target="_blank" class="btn-youtube">
+                    <i class="fa-brands fa-youtube"></i> ▶️ VER VIDEO EXPLICATIVO
+                </a>
+            `;
+
+            modal.style.display = 'flex';
+        }
+
+        function cerrarModal() {
+            document.getElementById('lessonModal').style.display = 'none';
+        }
+
+        window.onclick = function(e) {
+            const modal = document.getElementById('lessonModal');
+            if (e.target === modal) {
+                cerrarModal();
+            }
+        };
+
+        // CALCULADORA LEY DE OHM
+        function calcularOhm() {
+            const type = document.getElementById('ohmCalcType').value;
+            const v1 = parseFloat(document.getElementById('ohmVal1').value);
+            const v2 = parseFloat(document.getElementById('ohmVal2').value);
+            const resElem = document.getElementById('ohmResult');
+
+            if (isNaN(v1) || isNaN(v2) || v2 === 0) {
+                resElem.innerText = "Resultado: Ingrese valores válidos";
+                return;
+            }
+
+            if (type === 'v') {
+                resElem.innerText = `Voltaje (V) = ${(v1 * v2).toFixed(2)} Volts`;
+            } else if (type === 'i') {
+                resElem.innerText = `Corriente (I) = ${(v1 / v2).toFixed(2)} Amperios`;
+            } else if (type === 'r') {
+                resElem.innerText = `Resistencia (R) = ${(v1 / v2).toFixed(2)} Ohmios (Ω)`;
+            }
+        }
+
+        // DIAGNÓSTICO RÁPIDO
+        function ejecutarDiagnostico() {
+            const val = document.getElementById('diagSelect').value;
+            const res = document.getElementById('diagResult');
+
+            const diagnosticos = {
+                'no-power': "🔎 <strong>Sugerencia:</strong> Revisa el cable de poder, la fuente de alimentación (mide si entrega 5VSB), el botón de encendido del chasis y busca cortocircuitos en la línea principal de 12V o VIN.",
+                'no-video': "🔎 <strong>Sugerencia:</strong> Limpia los contactos de la memoria RAM con una goma de borrar, prueba una sola memoria en distintos slots, resetea la BIOS (Clear CMOS) y prueba otra fuente o tarjeta gráfica.",
+                'blue-screen': "🔎 <strong>Sugerencia:</strong> Revisa el estado de salud del disco duro o SSD con CrystalDiskInfo, realiza un test a la memoria RAM con MemTest86 o verifica controladores recientes corruptos.",
+                'overheat': "🔎 <strong>Sugerencia:</strong> Reemplaza la pasta térmica del procesador, verifica que el fan cooler gire a buenas RPM y limpia el polvo acumulado en los disipadores."
+            };
+
+            res.innerHTML = diagnosticos[val] || "";
+        }
+
+        window.onload = () => {
+            renderizarModulos();
+        };
+    </script>
+</body>
+</html>
